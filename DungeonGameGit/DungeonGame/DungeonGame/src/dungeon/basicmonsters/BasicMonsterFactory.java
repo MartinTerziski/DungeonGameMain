@@ -28,10 +28,11 @@ public class BasicMonsterFactory {
 			}
 			
 			if ("AEIOUY".indexOf(basicMonster.getName().charAt(0))>=0) {
-				System.out.println("An " + basicMonster.getName() + " is facing you!");
+				System.out.print("An ");
 			} else {
-				System.out.println("A " + basicMonster.getName() + " is facing you!");
+				System.out.print("A ");
 			}
+			System.out.println(basicMonster.getName() + " is facing you!");
 			return basicMonster;
 		}
 	}

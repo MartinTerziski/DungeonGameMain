@@ -1,5 +1,27 @@
-This is an individual project of plain Java, called DungeonGame. It is based on a textual turn-based game, where you choose your class with roleplay elements and fight through an abandoned village.
+**Gameplay**
 
-You can choose between 3 classes with different powers and history (Juggernaut, Spell Invoker and Marksman). The character must fight through the challenges in the village, for it to be cleansed by a savior's hand. The main commands are Basic Attack, Use of a Spell (depending on the Mana bar) and Using a potion. The character can also level up and increase his stats by your choosing.
+In DungeonGame, players can choose between three classes: Juggernaut, Spell Invoker, and Marksman. Each class has its own unique set of powers and backstory. Players must fight through challenges in the village and progress through the game to ultimately cleanse the village with a savior's hand.
 
-The main purpose of this project is to be considered as a portolio, in which the usage of Java OOP Concepts(Inheritance, Polymorphism...) and types of Design Patterns is present.
+The main commands in DungeonGame are Basic Attack, Use of a Spell (depending on the Mana bar), and Using a Potion. Players can also level up their character and increase their stats according to their choosing.
+
+**Purpose of the Project**
+
+The main purpose of this project is to demonstrate the usage of Java OOP concepts, such as inheritance and polymorphism, and types of design patterns. It can be used as a portfolio to showcase programming skills to potential employers or clients.
+
+**How to Play**
+
+To run the game, simply download the code and compile it using a Java compiler. Once compiled, execute the program to start the game.
+
+**Examples**
+
+Here are some examples of commands and actions that can be taken within the game:
+
+*Basic Attack*: Inflicts damage to the enemy using the player's equipped weapon.
+
+*Use of a Spell*: Cast a spell to deal damage to the enemy, based on the player's mana bar.
+
+*Using a Potion*: Restore the player's health points.
+
+**Conclusion**
+
+DungeonGame is a fun and challenging game that showcases the use of Java OOP concepts and design patterns. It can be a great addition to any programmer's portfolio, and provides an enjoyable gaming experience for players.

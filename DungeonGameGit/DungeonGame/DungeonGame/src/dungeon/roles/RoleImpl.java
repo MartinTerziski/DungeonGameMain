@@ -15,7 +15,7 @@ public class RoleImpl implements Role{
 	int potionDropChance;
 	int experience;
 	int level;
-	int levelDivider = 50;
+	int levelDivider;
 	Spells spells;
 	
 	public RoleImpl(int coreHealth, int maxHealth, int coreMana, 
@@ -45,11 +45,6 @@ public class RoleImpl implements Role{
         return "Role";
     }
 
-    @Override
-    public String getDescription() {
-        return "Default role";
-    }
-	
 	public String stats() {
 		return "Stats: \n" +
 				"* Health: " + getMaxHealth() + "/" + getCoreHealth() + "\n" +
@@ -57,7 +52,7 @@ public class RoleImpl implements Role{
 				"* Maximum attack damage: " + getAttackDmg() + "\n" +
 				"* Health potions: " + getHealthPotions() + "\n" +
 				"* Mana potions: " + getManaPotions() + "\n" +
-				"* Experience: " + getExperience() + "\n" +
+				"* Experience: " + getExperience() + "/" + getLevelDivider() + "\n" +
 				"* Level: " + getLevel() + "\n";
 	}
 	public String spells() {

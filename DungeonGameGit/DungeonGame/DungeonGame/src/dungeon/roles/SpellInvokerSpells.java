@@ -50,7 +50,7 @@ public class SpellInvokerSpells extends AbstractSpells {
     
     public static boolean resolveStormBolt(int manaWeight, Spells spells, Role role,
 			BasicMonster basicMonster, String input) {
-    	int stormBolt = ((Spells) spells).getStormBolt();
+    	int stormBolt = spells.getStormBolt();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
 		System.out.println("***You use the power of the storms!***");
@@ -59,7 +59,7 @@ public class SpellInvokerSpells extends AbstractSpells {
     
     public static boolean resolveFireComet(int manaWeight, Spells spells, Role role,
 			BasicMonster basicMonster, String input) {
-    	int fireComet = ((Spells) spells).getFireComet();
+    	int fireComet = spells.getFireComet();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
 		System.out.println("***You use the power of the fire!***");
@@ -68,7 +68,7 @@ public class SpellInvokerSpells extends AbstractSpells {
     
     public static boolean resolveIceShard(int manaWeight, Spells spells, Role role,
 			BasicMonster basicMonster, String input) {
-    	int iceShard = ((Spells) spells).getIceShard();
+    	int iceShard = spells.getIceShard();
 		role.setMaxMana(role.getMaxMana() - 10);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
 		System.out.println("***You use the power of the ice!***");
@@ -80,36 +80,29 @@ public class SpellInvokerSpells extends AbstractSpells {
 		int dmgTaken;
 		int randomBscMonsterDmg = SpellsHandler.random.nextInt(basicMonster.getBasicMonsterAttack());
 		switch(input) {
-		case "1":
-			dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spell;
-			//Range characters take 10% less damage
-			dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
-			calculateReducedDamage(spells, role, dmgTaken, randomBscMonsterDmg);
-			if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
-			break;
-		case "2":
-			dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spell;
-			//Range characters take 10% less damage
-			dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
-			calculateReducedDamage(spells, role, dmgTaken, randomBscMonsterDmg);
-			if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
-			break;
-		case "3":
-			dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spell;
-			((Spells) spells).setReducedDamageStack(((Spells) spells).getReducedDamageStack() + 2);
-			//Range characters take 10% less damage
-			dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
-			calculateReducedDamage(spells, role, dmgTaken, randomBscMonsterDmg);	
-			if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
-			break;
+			case "1", "2" -> {
+				dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spell;
+				//Range characters take 10% less damage
+				dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
+				calculateReducedDamage(spells);
+				if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, false)) return true;
+			}
+		//Range characters take 10% less damage
+			case "3" -> {
+				dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spell;
+				spells.setReducedDamageStack(spells.getReducedDamageStack() + 2);
+				//Range characters take 10% less damage
+				dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
+				calculateReducedDamage(spells);
+				if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, false)) return true;
+			}
 		}
 		return false;
 	}
     
-    public static void calculateReducedDamage(Spells spells, Role role, int dmgTaken, int randomBscMonsterDmg) {
-		if(((Spells) spells).getReducedDamageStack() > 0) {
-			dmgTaken -= randomBscMonsterDmg*(((Spells) spells).getReducedDamage()/100.0f);
-			((Spells) spells).setReducedDamageStack(((Spells) spells).getReducedDamageStack() - 1);
+    public static void calculateReducedDamage(Spells spells) {
+		if(spells.getReducedDamageStack() > 0) {
+			spells.setReducedDamageStack(spells.getReducedDamageStack() - 1);
 		}
 	}
 }

@@ -58,8 +58,8 @@ public class MarksmanSpells extends AbstractSpells{
     
     public static boolean resolvePoisonArrow(int manaWeight, Spells spells, Role role,
 			BasicMonster basicMonster, String input) {
-    	int poisonArrow = ((Spells) spells).getPoisonArrow();
-		int poisonDamage = ((Spells) spells).getPoisonDmg();
+    	int poisonArrow = spells.getPoisonArrow();
+		int poisonDamage = spells.getPoisonDmg();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
 		System.out.println("***You use a posioned arrow!***");
@@ -68,7 +68,7 @@ public class MarksmanSpells extends AbstractSpells{
     
     public static boolean resolveFollowupArrows(int manaWeight, Spells spells, Role role,
     		BasicMonster basicMonster, String input) {
-    	int followupArrows = ((Spells) spells).getFollowupArrows();
+    	int followupArrows = spells.getFollowupArrows();
     	role.setMaxMana(role.getMaxMana() - manaWeight);
     	if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
     	System.out.println("***You fire consecutive shots!***");
@@ -77,8 +77,8 @@ public class MarksmanSpells extends AbstractSpells{
     
     public static boolean resolveCriticalArrow(int manaWeight, Spells spells, Role role,
     		BasicMonster basicMonster, String input) {
-    	int critArrow = ((Spells) spells).getCritArrow();
-		int critChance = ((Spells) spells).getCritChance();
+    	int critArrow = spells.getCritArrow();
+		int critChance = spells.getCritChance();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
 		System.out.println("***You fire an arrow to a weak spot!***");
@@ -89,43 +89,43 @@ public class MarksmanSpells extends AbstractSpells{
 		int dmgDealt;
 		int dmgTaken;
 		int randomBscMonsterDmg = SpellsHandler.random.nextInt(basicMonster.getBasicMonsterAttack());
-		switch(input) {
-		case "1":
-			dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spellPart1;
-			//Range characters take 10% less damage
-			dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
-			if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
-			applyPoison(spells, basicMonster, role, true);
-			break;
-		case "2":
-			dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) * spellPart1;
-			//Range characters take 10% less damage
-			dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
-			if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
-			applyPoison(spells, basicMonster, role, false);
-			break;
-		case "3":
-			dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg());
-			//Range characters take 10% less damage
-			dmgTaken = (int) (randomBscMonsterDmg*(90/100.0f));
-			if(spellPart2 < SpellsHandler.random.nextInt(100)) {
-				System.out.println("*+*+*You hit the weak spot!*+*+*");
-				dmgDealt += spellPart1*role.getAttackDmg();
+		switch (input) {
+			case "1" -> {
+				dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) + spellPart1;
+				//Range characters take 10% less damage
+				dmgTaken = (int) (randomBscMonsterDmg * (90 / 100.0f));
+				if (Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, false)) return true;
+				applyPoison(spells, basicMonster, true);
 			}
-			if(Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
-			applyPoison(spells, basicMonster, role, false);
-			break;
+			case "2" -> {
+				dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg()) * spellPart1;
+				//Range characters take 10% less damage
+				dmgTaken = (int) (randomBscMonsterDmg * (90 / 100.0f));
+				if (Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, false)) return true;
+				applyPoison(spells, basicMonster, false);
+			}
+			case "3" -> {
+				dmgDealt = SpellsHandler.random.nextInt(role.getAttackDmg());
+				//Range characters take 10% less damage
+				dmgTaken = (int) (randomBscMonsterDmg * (90 / 100.0f));
+				if (spellPart2 < SpellsHandler.random.nextInt(100)) {
+					System.out.println("*+*+*You hit the weak spot!*+*+*");
+					dmgDealt += spellPart1 * role.getAttackDmg();
+				}
+				if (Combat.calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, false)) return true;
+				applyPoison(spells, basicMonster, false);
+			}
 		}
 		return false;
 	}
     
-    public static void applyPoison(Spells spells, BasicMonster basicMonster, Role role, boolean isInitialShot) {
+    public static void applyPoison(Spells spells, BasicMonster basicMonster, boolean isInitialShot) {
 		if(basicMonster.getMaxBasicMonsterHealth() > 0) {
-			if(isInitialShot) ((Spells) spells).setPoisonStack(((Spells) spells).getPoisonStack() + 2);
-			if(((Spells) spells).getPoisonStack() > 0) {
-				System.out.println("The monster receives " + ((Spells) spells).getPoisonDmg() + " additional damage!");
-				basicMonster.setMaxBasicMonsterHealth(basicMonster.getMaxBasicMonsterHealth() - ((Spells) spells).getPoisonDmg());
-				((Spells) spells).setPoisonStack(((Spells) spells).getPoisonStack() - 1);
+			if(isInitialShot) spells.setPoisonStack(spells.getPoisonStack() + 2);
+			if(spells.getPoisonStack() > 0) {
+				System.out.println("The monster receives " + spells.getPoisonDmg() + " additional damage!");
+				basicMonster.setMaxBasicMonsterHealth(basicMonster.getMaxBasicMonsterHealth() - spells.getPoisonDmg());
+				spells.setPoisonStack(spells.getPoisonStack() - 1);
 			}
 		}
 	}

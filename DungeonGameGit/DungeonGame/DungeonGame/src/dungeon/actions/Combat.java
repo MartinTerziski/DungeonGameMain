@@ -16,7 +16,7 @@ import dungeon.utilites.ConsoleColors;
 
 public class Combat {
 	
-	private static Random random = new Random();
+	private static final Random random = new Random();
     
     public static boolean calculateCombat(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
 		System.out.println("+++++++++++ =========== +++++++++++");
@@ -35,23 +35,7 @@ public class Combat {
 			switch (action) {
 				case "1" -> {
 					int dmgDealt = random.nextInt(role.getAttackDmg());
-					int dmgTaken;
-					//Range characters take 10% less damage
-					if (role instanceof SpellInvoker || role instanceof Marksman)
-						dmgTaken = (int) (random.nextInt(basicMonster.getBasicMonsterAttack()) * (90 / 100.0f));
-					else
-						dmgTaken = random.nextInt(basicMonster.getBasicMonsterAttack());
-					if (role instanceof Juggernaut) {
-						JuggernautSpells.setupImmunized(spells, role, dmgTaken);
-					}
-					if (role instanceof SpellInvoker) {
-						int randomBscMonsterDmg = random.nextInt(basicMonster.getBasicMonsterAttack());
-						SpellInvokerSpells.calculateReducedDamage(spells, role, dmgTaken, randomBscMonsterDmg);
-					}
-					if (role instanceof Marksman) {
-						MarksmanSpells.applyPoison(spells, basicMonster, role, false);
-					}
-					if (calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken)) return true;
+					if (calculateFightActions(role, spells, basicMonster, dmgDealt, false)) return true;
 				}
 				case "2" -> {
 					System.out.println("Which spell do you want to use?");
@@ -60,8 +44,11 @@ public class Combat {
 					String spell = input.nextLine();
 					if (SpellsHandler.useSpell(spells, role, basicMonster, spell)) return true;
 				}
-				case "3" -> PotionHandler.usePotion(role, action);
-				case "4" -> PotionHandler.usePotion(role, action);
+				case "3", "4" -> {
+					PotionHandler.usePotion(role, action);
+					int dmgDealt = 0;
+					if (calculateFightActions(role, spells, basicMonster, dmgDealt, true)) return true;
+				}
 				case "5" -> {
 					System.out.println("You mount your horse and run away from the battle!");
 					return true;
@@ -77,6 +64,25 @@ public class Combat {
 		//Result from fight
 		resultFromFight(basicMonster, role, spells, input);
 		return false;
+	}
+
+	public static boolean calculateFightActions(Role role, Spells spells, BasicMonster basicMonster, int dmgDealt, boolean isDrinkingPotion) {
+		int dmgTaken;
+		//Range characters take 10% less damage
+		if (role instanceof SpellInvoker || role instanceof Marksman)
+			dmgTaken = (int) (random.nextInt(basicMonster.getBasicMonsterAttack()) * (90 / 100.0f));
+		else
+			dmgTaken = random.nextInt(basicMonster.getBasicMonsterAttack());
+		if (role instanceof Juggernaut) {
+			JuggernautSpells.setupImmunized(spells, dmgTaken);
+		}
+		if (role instanceof SpellInvoker) {
+			SpellInvokerSpells.calculateReducedDamage(spells);
+		}
+		if (role instanceof Marksman) {
+			MarksmanSpells.applyPoison(spells, basicMonster, false);
+		}
+		return calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, isDrinkingPotion);
 	}
     
     public static void resultFromFight(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
@@ -143,10 +149,10 @@ public class Combat {
 	}
 
     
-    public static boolean calculateAfterSwing(Role role, BasicMonster basicMonster, int dmgDealt, int dmgTaken) {
+    public static boolean calculateAfterSwing(Role role, BasicMonster basicMonster, int dmgDealt, int dmgTaken, boolean isDrinkingPotion) {
     	basicMonster.setMaxBasicMonsterHealth(basicMonster.getMaxBasicMonsterHealth() - dmgDealt);
 		role.setMaxHealth(role.getMaxHealth() - dmgTaken);
-		System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+		if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
 		System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
 		if(role.getMaxHealth() < 1) {
 			System.out.println("You died...");

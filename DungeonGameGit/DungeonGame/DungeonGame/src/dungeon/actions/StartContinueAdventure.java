@@ -29,25 +29,28 @@ public class StartContinueAdventure {
 			System.out.println("\t2. See statistics.");
 			System.out.println("\t3. Use Health potion.");
 			System.out.println("\t4. Use Mana potion.");
-			System.out.println("\t5. Leave the village.");
+			System.out.println("\t5. See number of slayed monsters.");
+			System.out.println("\t6. Leave the village.");
 			String nextInput = input.nextLine();
-			while(!nextInput.equals("1") && !nextInput.equals("2") && !nextInput.equals("3")
-					&& !nextInput.equals("4") && !nextInput.equals("5")) {
-				System.out.println("Invalid Command!");
-				break;
-			}
-			if(nextInput.equals("1")) {
-				System.out.println("You continue searching the village... After some time...");
-				continued = true;
-			} else if(nextInput.equals("2")) {
-				System.out.println(role.stats());
-			} else if(nextInput.equals("3")) {
-				PotionHandler.usePotion(role, nextInput);
-			} else if(nextInput.equals("4")) {
-				PotionHandler.usePotion(role, nextInput);
-			} else if(nextInput.equals("5")) {
-				System.out.println("You are leaving the village...");
-				break;
+			switch (nextInput) {
+				case "1" -> {
+					System.out.println("You continue searching the village... After some time...");
+					continued = true;
+				}
+				case "2" -> {
+					System.out.println(role.stats());
+					System.out.println("+++++++++++ =========== +++++++++++");
+				}
+				case "3", "4" -> PotionHandler.usePotion(role, nextInput);
+				case "5" -> {
+					System.out.println(role.slayedMonstersCounter());
+					System.out.println("+++++++++++ =========== +++++++++++");
+				}
+				case "6" -> System.out.println("You are leaving the village...");
+				default -> {
+					System.out.println("Invalid Command: " + nextInput);
+					System.out.println("+++++++++++ =========== +++++++++++");
+				}
 			}
 		}
 		return continued;

@@ -1,5 +1,6 @@
 package dungeon.roles;
 
+import dungeon.basicmonsters.CounterMonsters;
 import lombok.Data;
 
 @Data
@@ -7,18 +8,18 @@ public class Marksman extends RoleImpl implements Role {
 	
 	private Spells spells;
 	
-	public Marksman(int coreHealth, int maxHealth, 
-			int coreMana, int maxMana, 
-			int attackDmg, int healthPotions, int manaPotions,
-			int hpPotionHeal, int hpDropChance,
-			int experience, int level, int levelDivider,
-			Spells spells) {
+	public Marksman(int coreHealth, int maxHealth,
+					int coreMana, int maxMana,
+					int attackDmg, int healthPotions, int manaPotions,
+					int hpPotionHeal, int hpDropChance,
+					int experience, int level, int levelDivider,
+					CounterMonsters counter, Spells spells) {
 		super(coreHealth, maxHealth, 
 				coreMana, maxMana, 
 				attackDmg, healthPotions, manaPotions,
 				hpPotionHeal, hpDropChance, 
 				experience, level, levelDivider,
-				spells);
+				counter, spells);
 		this.spells = spells;
 	}
 	
@@ -51,7 +52,11 @@ public class Marksman extends RoleImpl implements Role {
 				"(Fires an arrow to a weak spot that has a " + getSpells().getCritChance() + "% chance " +
 				"to deal " + getSpells().getCritArrow() + " times from base attack damage)";
 	}
-	
+
+	public String slayedMonstersCounter() {
+		return super.slayedMonstersCounter();
+	}
+
 	public String readyWeapon() {
 		return super.readyWeapon() + "bow!";
 	}

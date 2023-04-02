@@ -1,5 +1,6 @@
 package dungeon.roles;
 
+import dungeon.basicmonsters.CounterMonsters;
 import lombok.Data;
 
 @Data
@@ -7,18 +8,18 @@ public class Juggernaut extends RoleImpl implements Role, UIInfo {
 
 	private Spells spells;
 	
-	public Juggernaut(int coreHealth, int maxHealth, 
-			int coreMana, int maxMana, 
-			int attackDmg, int healthPotions, int manaPotions, 
-			int hpPotionHeal, int hpDropChance, 
-			int experience, int level, int levelDivider,
-			Spells spells) {
+	public Juggernaut(int coreHealth, int maxHealth,
+					  int coreMana, int maxMana,
+					  int attackDmg, int healthPotions, int manaPotions,
+					  int hpPotionHeal, int hpDropChance,
+					  int experience, int level, int levelDivider,
+					  CounterMonsters counter, Spells spells) {
 		super(coreHealth, maxHealth, 
 				coreMana, maxMana, 
 				attackDmg, healthPotions, 
 				manaPotions, hpPotionHeal, hpDropChance, 
 				experience, level, levelDivider,
-				spells);
+				counter, spells);
 		this.spells = spells;
 	}
 	
@@ -44,6 +45,10 @@ public class Juggernaut extends RoleImpl implements Role, UIInfo {
 				"2. Mana Power: Immunizing Shield [10 Mana cost] - " + 
 				(spells.getImmunizingShield()==1 ? "(The next attack from an enemy is negated)"
 				: "(The next " + spells.getImmunizingShield() + " attacks are negated)") + "\n";
+	}
+
+	public String slayedMonstersCounter() {
+		return super.slayedMonstersCounter();
 	}
 	
 	public String readyWeapon() {

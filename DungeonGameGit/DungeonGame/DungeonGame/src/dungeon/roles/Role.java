@@ -3,11 +3,11 @@ package dungeon.roles;
 public interface Role{
 	
 	// Methods for UI logic
-	public default String getName() {
+	default String getName() {
         return "Role";
     }
 
-    public default String getDescription() {
+    default String getDescription() {
         return "Default role";
     }
     
@@ -52,6 +52,8 @@ public interface Role{
 	String stats();
 	
 	String spells();
+
+	String slayedMonstersCounter();
 	
 	String readyWeapon();
 }

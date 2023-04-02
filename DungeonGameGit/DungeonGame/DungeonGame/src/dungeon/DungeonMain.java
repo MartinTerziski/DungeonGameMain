@@ -6,6 +6,7 @@ import dungeon.actions.Combat;
 import dungeon.actions.StartContinueAdventure;
 import dungeon.basicmonsters.BasicMonster;
 import dungeon.basicmonsters.BasicMonsterFactory;
+import dungeon.basicmonsters.CounterMonsters;
 import dungeon.roles.RoleFactory;
 import dungeon.roles.Spells;
 import dungeon.roles.Role;
@@ -13,14 +14,16 @@ import dungeon.roles.Role;
 public class DungeonMain {
 
 	public static void main(String[] args) {
-		
-		BasicMonsterFactory basicMonsterFactory = new BasicMonsterFactory();
+
+		CounterMonsters counterMonsters = new CounterMonsters(0, 0, 0, 0, 0);
+		BasicMonsterFactory basicMonsterFactory = new BasicMonsterFactory(counterMonsters);
 		RoleFactory roleFactory = new RoleFactory();
+
 		Scanner input = new Scanner(System.in);
 		boolean running = true;
 		
 		//Choosing a starting hero
-		Role chosenRole = roleFactory.getCharacter(input);
+		Role chosenRole = roleFactory.getCharacter(input, counterMonsters);
 		Spells spells = chosenRole.getSpells();
 		
 		//Begin journey
@@ -29,7 +32,11 @@ public class DungeonMain {
 		//Running the game
 		while(running) {
 			//Randomize the monster
-			BasicMonster basicMonster = basicMonsterFactory.getMonster();
+			BasicMonster basicMonster;
+
+			do {
+				basicMonster = basicMonsterFactory.getMonster();
+			} while (counterMonsters.isMaxReached(basicMonster.getName()));
 			
 			//Actions in battle
 			if(Combat.calculateCombat(basicMonster, chosenRole, spells, input)) break;

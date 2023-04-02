@@ -17,7 +17,7 @@ import dungeon.utilites.ConsoleColors;
 public class Combat {
 	
 	private static final Random random = new Random();
-    
+
     public static boolean calculateCombat(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
 		System.out.println("+++++++++++ =========== +++++++++++");
 		while(basicMonster.getMaxBasicMonsterHealth() > 0) {

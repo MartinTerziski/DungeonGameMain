@@ -1,6 +1,9 @@
 package dungeon.roles;
 
+import dungeon.basicmonsters.CounterMonsters;
 import lombok.Data;
+
+import java.util.Map;
 
 @Data
 public class RoleImpl implements Role{
@@ -16,13 +19,14 @@ public class RoleImpl implements Role{
 	int experience;
 	int level;
 	int levelDivider;
+	CounterMonsters counter;
 	Spells spells;
-	
-	public RoleImpl(int coreHealth, int maxHealth, int coreMana, 
-			int maxMana, int attackDmg, int healthPotions, 
-			int manaPotions, int potionHeal, int potionDropChance, 
-			int experience, int level, int levelDivider,
-			Spells spells) {
+
+	public RoleImpl(int coreHealth, int maxHealth, int coreMana,
+					int maxMana, int attackDmg, int healthPotions,
+					int manaPotions, int potionHeal, int potionDropChance,
+					int experience, int level, int levelDivider,
+					CounterMonsters counter, Spells spells) {
 		super();
 		this.coreHealth = coreHealth;
 		this.maxHealth = maxHealth;
@@ -37,8 +41,9 @@ public class RoleImpl implements Role{
 		this.level = level;
 		this.levelDivider = levelDivider;
 		this.spells = spells;
+		this.counter = counter;
 	}
-	
+
 	//UI methods
 	@Override
     public String getName() {
@@ -55,9 +60,20 @@ public class RoleImpl implements Role{
 				"* Experience: " + getExperience() + "/" + getLevelDivider() + "\n" +
 				"* Level: " + getLevel() + "\n";
 	}
+
+	public String slayedMonstersCounter() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Slayed Monsters:\n");
+		for (Map.Entry<String, Integer> entry : counter.getCounterMap().entrySet()) {
+			sb.append("- ").append(entry.getKey()).append(": ").append(entry.getValue()).append("/5\n");
+		}
+		return sb.toString();
+	}
+
 	public String spells() {
 		return "";
 	}
+
 	public String readyWeapon() {
 		return "You immediately ready your ";
 	}

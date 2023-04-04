@@ -74,7 +74,7 @@ public class Combat {
 		else
 			dmgTaken = random.nextInt(basicMonster.getBasicMonsterAttack());
 		if (role instanceof Juggernaut) {
-			JuggernautSpells.setupImmunized(spells, dmgTaken);
+			dmgTaken = JuggernautSpells.setupImmunized(spells, dmgTaken);
 		}
 		if (role instanceof SpellInvoker) {
 			SpellInvokerSpells.calculateReducedDamage(spells);
@@ -139,15 +139,18 @@ public class Combat {
 					case "1" -> {
 						role.setAttackDmg(role.getAttackDmg() + 5);
 						System.out.println("You upgraded your weapon, it now deals additional " + role.getAttackDmg() + " damage!");
+						canContinue = false;
 					}
 					case "2" -> {
 						role.setPotionDropChance(role.getPotionDropChance() + 5);
 						System.out.println("You upgraded your health potions drop chance, it now has " + role.getPotionDropChance() + "% drop chance!");
+						canContinue = false;
 					}
 					case "3" -> {
 						role.setCoreHealth(role.getCoreHealth() + 10);
 						role.setMaxHealth(role.getMaxHealth() + 10);
 						System.out.println("You upgraded your maximum health, you now have " + role.getCoreHealth() + " health!");
+						canContinue = false;
 					}
 					case "4" -> {
 						role.setHpPotionHeal(role.getHpPotionHeal() + 5);

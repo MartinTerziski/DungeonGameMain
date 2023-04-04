@@ -50,7 +50,8 @@ public class Marksman extends RoleImpl implements Role {
 				"(Fires " + getSpells().getFollowupArrows() + " consecutive shots, in the size of your attack damage)" + "\n" + 
 				"3. Mana Power: Critical Arrow [5 Mana cost] - " +
 				"(Fires an arrow to a weak spot that has a " + getSpells().getCritChance() + "% chance " +
-				"to deal " + getSpells().getCritArrow() + " times from base attack damage)";
+				"to deal " + getSpells().getCritArrow() + " times from base attack damage)" +
+				"4. Cancel using a spell" + "\n";
 	}
 
 	public String slayedMonstersCounter() {

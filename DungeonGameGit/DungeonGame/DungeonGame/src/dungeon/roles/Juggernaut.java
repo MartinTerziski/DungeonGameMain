@@ -44,7 +44,8 @@ public class Juggernaut extends RoleImpl implements Role, UIInfo {
 				"(The next attack is empowered by " + spells.getEmpowerAttack() + " damage)" + "\n" +
 				"2. Mana Power: Immunizing Shield [10 Mana cost] - " + 
 				(spells.getImmunizingShield()==1 ? "(The next attack from an enemy is negated)"
-				: "(The next " + spells.getImmunizingShield() + " attacks are negated)") + "\n";
+				: "(The next " + spells.getImmunizingShield() + " attacks are negated)") + "\n" +
+				"3. Cancel using a spell" + "\n";
 	}
 
 	public String slayedMonstersCounter() {

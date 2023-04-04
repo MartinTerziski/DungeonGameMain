@@ -46,7 +46,8 @@ public class SpellInvoker extends RoleImpl implements Role, UIInfo{
 				"2. Mana Power: Fire Comet [20 Mana cost] - " + 
 				"(Deals massive damage to an enemy for " + getSpells().getFireComet() + " damage)" + "\n" + 
 				"3. Mana Power: Ice Shard [10 Mana cost] - " + 
-				"(Deals " + getSpells().getIceShard() + " damage to an enemy and reduces " + getSpells().getReducedDamage() + "% monster damage for their next 2 attacks)\n";
+				"(Deals " + getSpells().getIceShard() + " damage to an enemy and reduces " + getSpells().getReducedDamage() + "% monster damage for their next 2 attacks)\n" +
+				"4. Cancel using a spell" + "\n";
 	}
 	public String slayedMonstersCounter() {
 		return super.slayedMonstersCounter();

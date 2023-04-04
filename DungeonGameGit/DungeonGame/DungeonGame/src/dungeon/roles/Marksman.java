@@ -8,16 +8,12 @@ public class Marksman extends RoleImpl implements Role {
 	
 	private Spells spells;
 	
-	public Marksman(int coreHealth, int maxHealth,
-					int coreMana, int maxMana,
-					int attackDmg, int healthPotions, int manaPotions,
-					int hpPotionHeal, int hpDropChance,
+	public Marksman(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
+					int healthPotions, int manaPotions, int hpPotionHeal, int mpPotionHeal, int hpDropChance,
 					int experience, int level, int levelDivider,
 					CounterMonsters counter, Spells spells) {
-		super(coreHealth, maxHealth, 
-				coreMana, maxMana, 
-				attackDmg, healthPotions, manaPotions,
-				hpPotionHeal, hpDropChance, 
+		super(coreHealth, maxHealth, coreMana, maxMana, attackDmg,
+				healthPotions, manaPotions, hpPotionHeal, mpPotionHeal, hpDropChance,
 				experience, level, levelDivider,
 				counter, spells);
 		this.spells = spells;

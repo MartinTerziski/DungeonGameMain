@@ -30,7 +30,11 @@ public interface Role{
 	int getHealthPotions();
 	void setHealthPotions(int i);
 
-	int getPotionHeal();
+	int getHpPotionHeal();
+	void setHpPotionHeal(int i);
+
+	int getMpPotionHeal();
+	void setMpPotionHeal(int i);
 
 	int getExperience();
 	void setExperience(int i);

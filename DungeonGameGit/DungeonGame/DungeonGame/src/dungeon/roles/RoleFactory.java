@@ -62,21 +62,21 @@ public class RoleFactory {
 	private Role getJuggernautCharacter(CounterMonsters counterMonsters) {
 		Spells spells = new JuggernautSpells(20, 1, 0);
 	    return new Juggernaut(100, 100, 10, 10, 30,
-				1, 1, 30, 30,
+				1, 1, 30, 50,30,
 				0, 1, 30, counterMonsters, spells);
 	}
 
 	private Role getSpellInvokerCharacter(CounterMonsters counterMonsters) {
 		Spells spells = new SpellInvokerSpells(30, 60, 10, 20, 0);
 	    return new SpellInvoker(80, 80, 50, 50, 5,
-				1, 1, 30, 30,
+				1, 1, 30, 50,30,
 				0, 1, 30, counterMonsters, spells);
 	}
 
 	private Role getMarksmanCharacter(CounterMonsters counterMonsters) {
 		Spells spells = new MarksmanSpells(20, 5, 0, 2, 3, 20);
 	    return new Marksman(90, 90, 30, 30, 15,
-				1, 1, 30, 30,
+				1, 1, 30, 50, 30,
 				0,	1, 30, counterMonsters, spells);
 	}
 

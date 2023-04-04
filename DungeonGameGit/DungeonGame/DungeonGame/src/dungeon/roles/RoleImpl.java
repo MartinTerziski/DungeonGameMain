@@ -14,7 +14,8 @@ public class RoleImpl implements Role{
 	int attackDmg;
 	int healthPotions;
 	int manaPotions;
-	int potionHeal;
+	int hpPotionHeal;
+	int mpPotionHeal;
 	int potionDropChance;
 	int experience;
 	int level;
@@ -22,9 +23,8 @@ public class RoleImpl implements Role{
 	CounterMonsters counter;
 	Spells spells;
 
-	public RoleImpl(int coreHealth, int maxHealth, int coreMana,
-					int maxMana, int attackDmg, int healthPotions,
-					int manaPotions, int potionHeal, int potionDropChance,
+	public RoleImpl(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
+					int healthPotions, int manaPotions, int hpPotionHeal, int mpPotionHeal, int potionDropChance,
 					int experience, int level, int levelDivider,
 					CounterMonsters counter, Spells spells) {
 		super();
@@ -35,7 +35,8 @@ public class RoleImpl implements Role{
 		this.attackDmg = attackDmg;
 		this.healthPotions = healthPotions;
 		this.manaPotions = manaPotions;
-		this.potionHeal = potionHeal;
+		this.hpPotionHeal = hpPotionHeal;
+		this.mpPotionHeal = mpPotionHeal;
 		this.potionDropChance = potionDropChance;
 		this.experience = experience;
 		this.level = level;

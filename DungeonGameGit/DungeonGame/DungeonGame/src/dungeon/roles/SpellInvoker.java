@@ -8,16 +8,12 @@ public class SpellInvoker extends RoleImpl implements Role, UIInfo{
 
 	public Spells spells;
 	
-	public SpellInvoker(int coreHealth, int maxHealth,
-						int coreMana, int maxMana,
-						int attackDmg, int healthPotions, int manaPotions,
-						int hpPotionHeal, int hpDropChance,
+	public SpellInvoker(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
+						int healthPotions, int manaPotions, int hpPotionHeal, int mpPotionHeal, int hpDropChance,
 						int experience, int level, int levelDivider,
 						CounterMonsters counterMonsters, Spells spells) {
-		super(coreHealth, maxHealth, 
-				coreMana, maxMana, 
-				attackDmg, healthPotions, manaPotions,
-				hpPotionHeal, hpDropChance, 
+		super(coreHealth, maxHealth, coreMana, maxMana, attackDmg,
+				healthPotions, manaPotions, hpPotionHeal, mpPotionHeal, hpDropChance,
 				experience, level, levelDivider,
 				counterMonsters, spells);
 		this.spells = spells;

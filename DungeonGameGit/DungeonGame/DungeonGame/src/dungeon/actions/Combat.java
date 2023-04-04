@@ -15,7 +15,7 @@ import dungeon.roles.Spells;
 import dungeon.utilites.ConsoleColors;
 
 public class Combat {
-	
+
 	private static final Random random = new Random();
 
     public static boolean calculateCombat(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
@@ -30,7 +30,7 @@ public class Combat {
 			System.out.println("\t3. Drink Health potion!");
 			System.out.println("\t4. Drink Mana potion!");
 			System.out.println("\t5. Flee!");
-			
+
 			String action = input.nextLine();
 			switch (action) {
 				case "1" -> {
@@ -60,7 +60,7 @@ public class Combat {
 			System.out.println("You died in battle...");
 			return true;
 		}
-		
+
 		//Result from fight
 		resultFromFight(basicMonster, role, spells, input);
 		return false;
@@ -92,16 +92,17 @@ public class Combat {
 		System.out.println("The " + basicMonster.getName() + " was defeated!");
 		System.out.println("Your health: " + role.getMaxHealth() + "/" + role.getCoreHealth());
 		System.out.println("You gained " + basicMonster.getExperienceWeight() + " experience.");
-		
+
 		//Chance of gain health/mana potion
 		PotionHandler.healthPotionDrop(role);
 		PotionHandler.manaPotionDrop(role);
-		
+
 		// Level UP
 		levelingUp(role, input);
 	}
 
 	public static void levelingUp(Role role, Scanner input) {
+		boolean canContinue = true;
 		int currentLevel = role.getLevel();
 		int currentExp = role.getExperience();
 		int expRequired = role.getLevelDivider() * currentLevel;
@@ -125,24 +126,49 @@ public class Combat {
 			System.out.println("\t1. Increase maximum attack damage by 5");
 			System.out.println("\t2. Increase health/mana potions drop chance by 5%");
 			System.out.println("\t3. Increase maximum health by 10");
+			System.out.println("\t4. Increase health potion restoring percent by 5%");
+			System.out.println("\t5. Increase mana potion restoring percent by 5%");
 			String upgrade = input.nextLine();
-			while (!upgrade.equals("1") && !upgrade.equals("2") && !upgrade.equals("3")) {
+			while (!upgrade.equals("1") && !upgrade.equals("2") && !upgrade.equals("3")
+					&& !upgrade.equals("4") && !upgrade.equals("5")) {
 				System.out.println("Invalid Command!");
 				upgrade = input.nextLine();
 			}
-			switch (upgrade) {
-				case "1" -> {
-					role.setAttackDmg(role.getAttackDmg() + 5);
-					System.out.println("You upgraded your weapon, it now deals additional " + role.getAttackDmg() + " damage!");
-				}
-				case "2" -> {
-					role.setPotionDropChance(role.getPotionDropChance() + 5);
-					System.out.println("You upgraded your health potions drop chance, it now has " + role.getPotionDropChance() + "% drop chance!");
-				}
-				case "3" -> {
-					role.setCoreHealth(role.getCoreHealth() + 10);
-					role.setMaxHealth(role.getMaxHealth() + 10);
-					System.out.println("You upgraded your maximum health, you now have " + role.getCoreHealth() + " health!");
+			while(canContinue) {
+				switch (upgrade) {
+					case "1" -> {
+						role.setAttackDmg(role.getAttackDmg() + 5);
+						System.out.println("You upgraded your weapon, it now deals additional " + role.getAttackDmg() + " damage!");
+					}
+					case "2" -> {
+						role.setPotionDropChance(role.getPotionDropChance() + 5);
+						System.out.println("You upgraded your health potions drop chance, it now has " + role.getPotionDropChance() + "% drop chance!");
+					}
+					case "3" -> {
+						role.setCoreHealth(role.getCoreHealth() + 10);
+						role.setMaxHealth(role.getMaxHealth() + 10);
+						System.out.println("You upgraded your maximum health, you now have " + role.getCoreHealth() + " health!");
+					}
+					case "4" -> {
+						role.setHpPotionHeal(role.getHpPotionHeal() + 5);
+						if(role.getHpPotionHeal() > 100) {
+							System.out.println("Maximum restoring effect reached! Please choose another upgrade...");
+							role.setHpPotionHeal(role.getHpPotionHeal() - 5);
+						} else {
+							System.out.println("You upgraded your health potion restoring percent to " + role.getHpPotionHeal() +"!");
+							canContinue = false;
+						}
+					}
+					case "5" -> {
+						role.setMpPotionHeal(role.getMpPotionHeal() + 5);
+						if(role.getMpPotionHeal() > 100) {
+							System.out.println("Maximum restoring effect reached! Please choose another upgrade...");
+							role.setMpPotionHeal(role.getMpPotionHeal() - 5);
+						} else {
+							System.out.println("You upgraded your mana potion restoring percent to " + role.getMpPotionHeal() +"!");
+							canContinue = false;
+						}
+					}
 				}
 			}
 		}
@@ -150,7 +176,7 @@ public class Combat {
 
     
     public static boolean calculateAfterSwing(Role role, BasicMonster basicMonster, int dmgDealt, int dmgTaken, boolean isDrinkingPotion) {
-    	basicMonster.setMaxBasicMonsterHealth(basicMonster.getMaxBasicMonsterHealth() - dmgDealt);
+		basicMonster.setMaxBasicMonsterHealth(basicMonster.getMaxBasicMonsterHealth() - dmgDealt);
 		role.setMaxHealth(role.getMaxHealth() - dmgTaken);
 		if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
 		System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);

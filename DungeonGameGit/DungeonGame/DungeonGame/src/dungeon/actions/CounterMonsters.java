@@ -1,4 +1,4 @@
-package dungeon.basicmonsters;
+package dungeon.actions;
 
 import lombok.Data;
 

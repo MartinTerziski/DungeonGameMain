@@ -42,7 +42,7 @@ public class PotionHandler {
 		if(action.equals("3")) {
 			if(role.getHealthPotions() <= 0) System.out.println("You ran out of health potions!");
 			else {
-				double amountToHeal = (double) role.getHpPotionHeal() /100 * role.getCoreHealth();
+				double amountToHeal = (double) role.getPotionHeal() /100 * role.getCoreHealth();
 				role.setMaxHealth((int) Math.min(role.getMaxHealth() + amountToHeal, role.getCoreHealth()));
 				role.setHealthPotions(role.getHealthPotions() - 1);
 				if(role.getMaxHealth() > role.getCoreHealth()) role.setMaxHealth(role.getCoreHealth());
@@ -53,7 +53,7 @@ public class PotionHandler {
 		} else if(action.equals("4")){
 			if(role.getManaPotions() <= 0) System.out.println("You ran out of mana potions!");
 			else {
-				double amountToHeal = (double) role.getMpPotionHeal() /100 * role.getCoreMana();
+				double amountToHeal = (double) role.getPotionHeal() /100 * role.getCoreMana();
 				role.setMaxMana((int) Math.min(role.getMaxMana() + amountToHeal, role.getCoreMana()));
 				role.setManaPotions(role.getManaPotions() - 1);
 				if(role.getMaxMana() > role.getCoreMana()) role.setMaxMana(role.getCoreMana());

@@ -1,6 +1,7 @@
 package dungeon.roles;
 
-import dungeon.basicmonsters.CounterMonsters;
+import dungeon.actions.CounterMonsters;
+import dungeon.actions.LevelUp;
 import lombok.Data;
 
 @Data
@@ -9,13 +10,11 @@ public class Juggernaut extends RoleImpl implements Role, UIInfo {
 	private Spells spells;
 	
 	public Juggernaut(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
-					  int healthPotions, int manaPotions, int hpPotionHeal, int mpPotionHeal, int hpDropChance,
-					  int experience, int level, int levelDivider,
-					  CounterMonsters counter, Spells spells) {
+					  int healthPotions, int manaPotions, int potionHeal, int hpDropChance,
+					  LevelUp levelUp, CounterMonsters counter, Spells spells) {
 		super(coreHealth, maxHealth, coreMana, maxMana, attackDmg,
-				healthPotions, manaPotions, hpPotionHeal, mpPotionHeal, hpDropChance,
-				experience, level, levelDivider,
-				counter, spells);
+				healthPotions, manaPotions, potionHeal, hpDropChance,
+				levelUp, counter, spells);
 		this.spells = spells;
 	}
 	

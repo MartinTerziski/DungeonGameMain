@@ -6,7 +6,7 @@ import dungeon.actions.Combat;
 import dungeon.actions.StartContinueAdventure;
 import dungeon.basicmonsters.BasicMonster;
 import dungeon.basicmonsters.BasicMonsterFactory;
-import dungeon.basicmonsters.CounterMonsters;
+import dungeon.actions.CounterMonsters;
 import dungeon.roles.RoleFactory;
 import dungeon.roles.Spells;
 import dungeon.roles.Role;

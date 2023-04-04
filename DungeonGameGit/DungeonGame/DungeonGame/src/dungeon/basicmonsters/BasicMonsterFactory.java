@@ -1,5 +1,7 @@
 package dungeon.basicmonsters;
 
+import dungeon.actions.CounterMonsters;
+
 import java.util.Random;
 
 public class BasicMonsterFactory {

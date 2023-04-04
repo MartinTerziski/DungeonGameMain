@@ -1,6 +1,7 @@
 package dungeon.roles;
 
-import dungeon.basicmonsters.CounterMonsters;
+import dungeon.actions.CounterMonsters;
+import dungeon.actions.LevelUp;
 import lombok.Data;
 
 import java.util.Map;
@@ -14,19 +15,18 @@ public class RoleImpl implements Role{
 	int attackDmg;
 	int healthPotions;
 	int manaPotions;
-	int hpPotionHeal;
-	int mpPotionHeal;
+	int potionHeal;
 	int potionDropChance;
 	int experience;
 	int level;
 	int levelDivider;
+	LevelUp levelUp;
 	CounterMonsters counter;
 	Spells spells;
 
 	public RoleImpl(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
-					int healthPotions, int manaPotions, int hpPotionHeal, int mpPotionHeal, int potionDropChance,
-					int experience, int level, int levelDivider,
-					CounterMonsters counter, Spells spells) {
+					int healthPotions, int manaPotions, int potionHeal, int potionDropChance,
+					LevelUp levelUp, CounterMonsters counter, Spells spells) {
 		super();
 		this.coreHealth = coreHealth;
 		this.maxHealth = maxHealth;
@@ -35,12 +35,9 @@ public class RoleImpl implements Role{
 		this.attackDmg = attackDmg;
 		this.healthPotions = healthPotions;
 		this.manaPotions = manaPotions;
-		this.hpPotionHeal = hpPotionHeal;
-		this.mpPotionHeal = mpPotionHeal;
+		this.potionHeal = potionHeal;
 		this.potionDropChance = potionDropChance;
-		this.experience = experience;
-		this.level = level;
-		this.levelDivider = levelDivider;
+		this.levelUp = levelUp;
 		this.spells = spells;
 		this.counter = counter;
 	}
@@ -58,8 +55,8 @@ public class RoleImpl implements Role{
 				"* Maximum attack damage: " + getAttackDmg() + "\n" +
 				"* Health potions: " + getHealthPotions() + "\n" +
 				"* Mana potions: " + getManaPotions() + "\n" +
-				"* Experience: " + getExperience() + "/" + getLevelDivider() + "\n" +
-				"* Level: " + getLevel() + "\n";
+				"* Experience: " + getLevelUp().getExperience() + "/" + getLevelUp().getLevelDivider() + "\n" +
+				"* Level: " + getLevelUp().getLevel() + "\n";
 	}
 
 	public String slayedMonstersCounter() {

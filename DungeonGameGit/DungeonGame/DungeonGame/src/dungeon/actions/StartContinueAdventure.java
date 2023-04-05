@@ -46,7 +46,10 @@ public class StartContinueAdventure {
 					System.out.println(role.slayedMonstersCounter());
 					System.out.println("+++++++++++ =========== +++++++++++");
 				}
-				case "6" -> System.out.println("You are leaving the village...");
+				case "6" -> {
+					System.out.println("You are leaving the village...");
+					return false;
+				}
 				default -> {
 					System.out.println("Invalid Command: " + nextInput);
 					System.out.println("+++++++++++ =========== +++++++++++");

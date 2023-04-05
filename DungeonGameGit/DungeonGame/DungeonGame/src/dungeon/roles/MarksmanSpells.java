@@ -5,19 +5,21 @@ import dungeon.actions.SpellsHandler;
 import dungeon.basicmonsters.BasicMonster;
 import lombok.Data;
 
+import java.util.Scanner;
+
 @Data
 public class MarksmanSpells extends AbstractSpells{
-	
+
 	public int poisonArrow;
 	public int poisonDmg;
 	public int poisonStack;
 	public int followupArrows;
 	public int critArrow;
 	public int critChance;
-	
+
 	public MarksmanSpells(int poisonArrow, int poisonDmg, int poisonStack,
-			int followupArrows, int critArrow,
-			int critChance) {
+						  int followupArrows, int critArrow,
+						  int critChance) {
 		this.poisonArrow = poisonArrow;
 		this.poisonDmg = poisonDmg;
 		this.poisonStack = poisonStack;
@@ -25,7 +27,7 @@ public class MarksmanSpells extends AbstractSpells{
 		this.critArrow = critArrow;
 		this.critChance = critChance;
 	}
-	
+
 	@Override
     public int getPoisonArrow() {
         return poisonArrow;
@@ -57,8 +59,8 @@ public class MarksmanSpells extends AbstractSpells{
     }
     
     public static boolean resolvePoisonArrow(int manaWeight, Spells spells, Role role,
-			BasicMonster basicMonster, String input) {
-    	int poisonArrow = spells.getPoisonArrow();
+											 BasicMonster basicMonster, String input) {
+		int poisonArrow = spells.getPoisonArrow();
 		int poisonDamage = spells.getPoisonDmg();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
@@ -67,23 +69,23 @@ public class MarksmanSpells extends AbstractSpells{
     }
     
     public static boolean resolveFollowupArrows(int manaWeight, Spells spells, Role role,
-    		BasicMonster basicMonster, String input) {
-    	int followupArrows = spells.getFollowupArrows();
-    	role.setMaxMana(role.getMaxMana() - manaWeight);
-    	if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
-    	System.out.println("***You fire consecutive shots!***");
-    	return battleResolveAfterMarksmanSpell(spells, role, basicMonster, input, followupArrows, 0);
+												BasicMonster basicMonster, String input) {
+		int followupArrows = spells.getFollowupArrows();
+		role.setMaxMana(role.getMaxMana() - manaWeight);
+		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
+		System.out.println("***You fire consecutive shots!***");
+		return battleResolveAfterMarksmanSpell(spells, role, basicMonster, input, followupArrows, 0);
     }
     
     public static boolean resolveCriticalArrow(int manaWeight, Spells spells, Role role,
-    		BasicMonster basicMonster, String input) {
-    	int critArrow = spells.getCritArrow();
+											   BasicMonster basicMonster, String input) {
+		int critArrow = spells.getCritArrow();
 		int critChance = spells.getCritChance();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
 		System.out.println("***You fire an arrow to a weak spot!***");
-		return battleResolveAfterMarksmanSpell(spells, role, basicMonster, input, critArrow, critChance);    	
-    }
+		return battleResolveAfterMarksmanSpell(spells, role, basicMonster, input, critArrow, critChance);
+	}
     
     private static boolean battleResolveAfterMarksmanSpell(Spells spells, Role role, BasicMonster basicMonster, String input, int spellPart1, int spellPart2) {
 		int dmgDealt;
@@ -128,5 +130,57 @@ public class MarksmanSpells extends AbstractSpells{
 				spells.setPoisonStack(spells.getPoisonStack() - 1);
 			}
 		}
+	}
+
+	public static boolean upgradeMarksmanSpells(Role role, Scanner input) {
+		System.out.println("\t1. Empower Poison Arrow's initial damage for 10 and ongoing damage for 5");
+		System.out.println("\t2. Empower Follow-up Arrows for an additional consecutive arrow");
+		System.out.println("\t3. Empower Critical Arrow for an additional critical chance by 10%");
+		System.out.println("\t4. Return to upgrade menu");
+		String spellUpgrade = input.nextLine();
+		while (!spellUpgrade.equals("1") && !spellUpgrade.equals("2")
+				&& !spellUpgrade.equals("3") && !spellUpgrade.equals("4")) {
+			System.out.println("Invalid Command!");
+			spellUpgrade = input.nextLine();
+		}
+		switch (spellUpgrade) {
+			case "1" -> {
+				// Upgrade Poison Arrow
+				int newPoisonArrow = role.getSpells().getPoisonArrow() + 10;
+				int newPoisonDmg = role.getSpells().getPoisonDmg() + 5;
+				role.getSpells().setPoisonArrow(newPoisonArrow);
+				role.getSpells().setPoisonDmg(newPoisonDmg);
+				System.out.println("You upgraded Poison Arrow!" +
+						" The initial damage is increased to " + newPoisonArrow + " damage" +
+						"and the ongoing damage is now " + newPoisonDmg + " for 2 turns!");
+				return false;
+			}
+			case "2" -> {
+				// Upgrade Follow-up Arrows
+				int newFollowupArrows = role.getSpells().getFollowupArrows() + 1;
+				role.getSpells().setFollowupArrows(newFollowupArrows);
+				System.out.println("You upgraded Follow-up Arrows! " +
+						"You now fire " + newFollowupArrows + " consecutive shots!");
+				return false;
+			}
+			case "3" -> {
+				// Upgrade Critical Arrow
+				int newCriticalChance = role.getSpells().getCritChance() + 10;
+				if(newCriticalChance > 100) {
+					System.out.println("Maximum critical chance for Critical Arrow is reached!" +
+							"Please choose another upgrade");
+					return true;
+				}
+				role.getSpells().setCritChance(newCriticalChance);
+				System.out.println("You upgraded Critical Arrow! " +
+						"You now have " + newCriticalChance + " chance to hit a critical blow!");
+				return false;
+			}
+			case "4" -> {
+				System.out.println("Returning to upgrade menu...");
+				return true;
+			}
+		}
+		return true;
 	}
 }

@@ -5,6 +5,8 @@ import dungeon.actions.SpellsHandler;
 import dungeon.basicmonsters.BasicMonster;
 import lombok.Data;
 
+import java.util.Scanner;
+
 @Data
 public class JuggernautSpells extends AbstractSpells{
 	
@@ -74,5 +76,37 @@ public class JuggernautSpells extends AbstractSpells{
 			return dmgTaken;
 		}
 
+	}
+
+	public static boolean upgradeJuggernautSpells(Role role, Scanner input) {
+		System.out.println("\t1. Empower Attack by 10 damage");
+		System.out.println("\t2. Immunizing Shield for one more turn");
+		System.out.println("\t3. Return to upgrade menu");
+		String spellUpgrade = input.nextLine();
+		while (!spellUpgrade.equals("1") && !spellUpgrade.equals("2") && !spellUpgrade.equals("3")) {
+			System.out.println("Invalid Command!");
+			spellUpgrade = input.nextLine();
+		}
+		switch (spellUpgrade) {
+			case "1" -> {
+				// Upgrade Empower Attack
+				int newEmpowerAttack = role.getSpells().getEmpowerAttack() + 10;
+				role.getSpells().setEmpowerAttack(newEmpowerAttack);
+				System.out.println("You upgraded Empower Attack! The next attack is empowered by " + newEmpowerAttack + " damage!");
+				return false;
+			}
+			case "2" -> {
+				// Upgrade Immunizing Shield
+				int newImmunizingShield = role.getSpells().getImmunizingShield() + 1;
+				role.getSpells().setImmunizingShield(newImmunizingShield);
+				System.out.println("You upgraded Immunizing Shield! The next " + newImmunizingShield + " attacks are negated!");
+				return false;
+			}
+			case "3" -> {
+				System.out.println("Returning to upgrade menu...");
+				return true;
+			}
+		}
+		return true;
 	}
 }

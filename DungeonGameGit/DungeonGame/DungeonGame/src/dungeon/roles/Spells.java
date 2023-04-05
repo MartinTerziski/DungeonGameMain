@@ -3,27 +3,49 @@ package dungeon.roles;
 public interface Spells {
 	
 	//Juggernaut Spells:
-	public int getEmpowerAttack();
-	public int getImmunizingShield();
-	public int getImmunized();
-	public void setImmunized(int spell);
+	int getEmpowerAttack();
+	void setEmpowerAttack(int spell);
+
+	int getImmunizingShield();
+	void setImmunizingShield(int spell);
+
+	int getImmunized();
+	void setImmunized(int spell);
 	
 	//SpellInvoker Spells:
-	public int getStormBolt();
-	public int getFireComet();
-	public int getIceShard();
-	public int getReducedDamage();
-	public int getReducedDamageStack();
-	public void setReducedDamageStack(int spell);
+	int getStormBolt();
+	void setStormBolt(int spell);
+
+	int getFireComet();
+	void setFireComet(int spell);
+
+	int getIceShard();
+	void setIceShard(int spell);
+
+	int getReducedDamage();
+	void setReducedDamage(int spell);
+
+	int getReducedDamageStack();
+	void setReducedDamageStack(int spell);
 	
 	//Marksman Spells:
-	public int getPoisonArrow();
-	public int getPoisonStack();
-	public void setPoisonStack(int spell);
-	public int getPoisonDmg();
-	public int getFollowupArrows();
-	public int getCritChance();
-	public int getCritArrow();
+	int getPoisonArrow();
+	void setPoisonArrow(int spell);
+
+	int getPoisonStack();
+	void setPoisonStack(int spell);
+
+	int getPoisonDmg();
+	void setPoisonDmg(int spell);
+
+	int getFollowupArrows();
+	void setFollowupArrows(int spell);
+
+	int getCritChance();
+	void setCritChance(int spell);
+
+	int getCritArrow();
+	void setCritArrow(int spell);
 	
 	
 }

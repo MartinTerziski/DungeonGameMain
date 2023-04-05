@@ -4,6 +4,9 @@ import dungeon.actions.Combat;
 import dungeon.actions.SpellsHandler;
 import dungeon.basicmonsters.BasicMonster;
 
+import java.util.Scanner;
+
+
 public class SpellInvokerSpells extends AbstractSpells {
 
     // implementation specific to SpellInvokerSpells
@@ -105,4 +108,55 @@ public class SpellInvokerSpells extends AbstractSpells {
 			spells.setReducedDamageStack(spells.getReducedDamageStack() - 1);
 		}
 	}
+
+    public static boolean upgradeSpellInvokerSpells(Role role, Scanner input) {
+        System.out.println("\t1. Empower Storm Bolt's damage by 10");
+        System.out.println("\t2. Empower Fire Comet's damage by 20");
+        System.out.println("\t3. Empower Ice Shard's initial damage by 10 and reduced damage by 5%");
+        System.out.println("\t4. Return to upgrade menu");
+        String spellUpgrade = input.nextLine();
+        while (!spellUpgrade.equals("1") && !spellUpgrade.equals("2")
+                && !spellUpgrade.equals("3") && !spellUpgrade.equals("4")) {
+            System.out.println("Invalid Command!");
+            spellUpgrade = input.nextLine();
+        }
+        switch (spellUpgrade) {
+            case "1" -> {
+                // Upgrade Storm Bolt
+                int newStormBolt = role.getSpells().getStormBolt() + 10;
+                role.getSpells().setStormBolt(newStormBolt);
+                System.out.println("You upgraded Storm Bolt!" +
+                        " It now deals " + newStormBolt + " damage!");
+                return false;
+            }
+            case "2" -> {
+                // Upgrade Fire Comet
+                int newFireComet = role.getSpells().getFireComet() + 1;
+                role.getSpells().setFireComet(newFireComet);
+                System.out.println("You upgraded Fire Comet! " +
+                        "It now deals " + newFireComet + " damage!");
+                return false;
+            }
+            case "3" -> {
+                // Upgrade Ice Shard
+                int newIceShard = role.getSpells().getIceShard() + 10;
+                int newReducedDamage = role.getSpells().getReducedDamage() + 5;
+                if(newReducedDamage > 100) {
+                    System.out.println("Maximum reduced damage from Ice Shard is reached!" +
+                            "Please choose another upgrade");
+                    return true;
+                }
+                role.getSpells().setIceShard(newIceShard);
+                role.getSpells().setReducedDamage(newReducedDamage);
+                System.out.println("You upgraded Ice Shard! " +
+                        "It now deals " + newIceShard + " damage with reduction of the next 2 attacks for " + newReducedDamage +"%!");
+                return false;
+            }
+            case "4" -> {
+                System.out.println("Returning to upgrade menu...");
+                return true;
+            }
+        }
+        return true;
+    }
 }

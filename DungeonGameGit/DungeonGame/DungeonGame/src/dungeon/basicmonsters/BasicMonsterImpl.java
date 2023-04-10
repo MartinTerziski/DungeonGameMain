@@ -10,4 +10,5 @@ public class BasicMonsterImpl{
 	int maxBasicMonsterHealth;
 	int basicMonsterAttack;
 	int experienceWeight;
+	int spell;
 }

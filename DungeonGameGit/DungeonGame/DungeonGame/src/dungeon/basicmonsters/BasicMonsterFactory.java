@@ -5,7 +5,7 @@ import dungeon.actions.CounterMonsters;
 import java.util.Random;
 
 public class BasicMonsterFactory {
-	private CounterMonsters counterMonsters;
+	private final CounterMonsters counterMonsters;
 
 	public BasicMonsterFactory(CounterMonsters counterMonsters) {
 		this.counterMonsters = counterMonsters;
@@ -19,27 +19,49 @@ public class BasicMonsterFactory {
 			switch (random.nextInt(5)) {
 				case 0 -> {
 					if (!counterMonsters.isMaxReached("Imp")) {
-						basicMonster = new Imp("Imp", 30, 15, 12);
+						basicMonster = new Imp("Imp",
+								30,
+								15,
+								12,
+								1);
 					}
 				}
 				case 1 -> {
 					if (!counterMonsters.isMaxReached("Wolf")) {
-						basicMonster = new Wolf("Wolf", 25, 15, 10);
+						basicMonster = new Wolf("Wolf",
+								25,
+								15,
+								10,
+								2);
 					}
 				}
 				case 2 -> {
 					if (!counterMonsters.isMaxReached("Ooze")) {
-						basicMonster = new Ooze("Ooze", 20, 15, 8);
+						basicMonster = new Ooze(
+								"Ooze",
+								20,
+								15,
+								8,
+								5);
 					}
 				}
 				case 3 -> {
 					if (!counterMonsters.isMaxReached("Corrupted Villager")) {
-						basicMonster = new CorruptedVillager("Corrupted Villager", 35, 15, 15);
+						basicMonster = new CorruptedVillager(
+								"Corrupted Villager",
+								35,
+								15,
+								15,
+								8);
 					}
 				}
 				case 4 -> {
 					if (!counterMonsters.isMaxReached("Wraith")) {
-						basicMonster = new Wraith("Wraith", 40, 20, 20);
+						basicMonster = new Wraith("Wraith",
+								40,
+								20,
+								20,
+								4);
 					}
 				}
 			}

@@ -27,8 +27,8 @@ public class StartContinueAdventure {
 		while(!continued) {
 			System.out.println("\t1. Advance through.");
 			System.out.println("\t2. See statistics.");
-			System.out.println("\t3. Use Health potion.");
-			System.out.println("\t4. Use Mana potion.");
+			System.out.println("\t3. Use Health potion. (You have " + role.getHealthPotions() + "/5 potions)");
+			System.out.println("\t4. Use Mana potion. (You have " + role.getManaPotions() + "/5 potions)");
 			System.out.println("\t5. See number of slayed monsters.");
 			System.out.println("\t6. Leave the village.");
 			String nextInput = input.nextLine();

@@ -2,10 +2,12 @@ package dungeon.roles;
 
 import dungeon.actions.CounterMonsters;
 import dungeon.actions.LevelUp;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Map;
 
+@AllArgsConstructor
 @Data
 public class RoleImpl implements Role{
 	int coreHealth;
@@ -17,30 +19,9 @@ public class RoleImpl implements Role{
 	int manaPotions;
 	int potionHeal;
 	int potionDropChance;
-	int experience;
-	int level;
-	int levelDivider;
 	LevelUp levelUp;
 	CounterMonsters counter;
 	Spells spells;
-
-	public RoleImpl(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
-					int healthPotions, int manaPotions, int potionHeal, int potionDropChance,
-					LevelUp levelUp, CounterMonsters counter, Spells spells) {
-		super();
-		this.coreHealth = coreHealth;
-		this.maxHealth = maxHealth;
-		this.coreMana = coreMana;
-		this.maxMana = maxMana;
-		this.attackDmg = attackDmg;
-		this.healthPotions = healthPotions;
-		this.manaPotions = manaPotions;
-		this.potionHeal = potionHeal;
-		this.potionDropChance = potionDropChance;
-		this.levelUp = levelUp;
-		this.spells = spells;
-		this.counter = counter;
-	}
 
 	//UI methods
 	@Override

@@ -22,7 +22,7 @@ public class LevelUp {
         boolean canContinue = true;
         int currentLevel = getLevel();
         int currentExp = getExperience();
-        int expRequired = getLevelDivider() * currentLevel;
+        int expRequired = getLevelDivider();
 
         // Level up
         setLevel(currentLevel + 1);

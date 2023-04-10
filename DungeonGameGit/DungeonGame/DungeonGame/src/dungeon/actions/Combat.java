@@ -1,14 +1,20 @@
 package dungeon.actions;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-import dungeon.basicmonsters.BasicMonster;
+import dungeon.basicmonsters.*;
 import dungeon.roles.*;
 import dungeon.utilites.ConsoleColors;
 
 public class Combat {
 
+	private static final Map<String, Integer> stolenPotions = new HashMap<>();
+	private static int increasedVillagerDamage = 0;
+	private static int decreasedOozeDamage = 0;
+	private static int overtimeWolfDamage = 0;
 	private static final Random random = new Random();
 
     public static boolean calculateCombat(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
@@ -20,8 +26,8 @@ public class Combat {
 			System.out.println("Your actions:");
 			System.out.println("\t1. Attack!");
 			System.out.println("\t2. Use spell!");
-			System.out.println("\t3. Drink Health potion!");
-			System.out.println("\t4. Drink Mana potion!");
+			System.out.println("\t3. Drink Health potion! (You have " + role.getHealthPotions() + "/5 potions)");
+			System.out.println("\t4. Drink Mana potion! (You have " + role.getManaPotions() + "/5 potions)");
 			System.out.println("\t5. Flee!");
 
 			String action = input.nextLine();
@@ -86,6 +92,47 @@ public class Combat {
 		System.out.println("Your health: " + role.getMaxHealth() + "/" + role.getCoreHealth());
 		System.out.println("You gained " + basicMonster.getExperienceWeight() + " experience.");
 
+		//After defeated monster
+		switch (basicMonster.getName()) {
+			case "Imp" -> {
+				if(!stolenPotions.isEmpty()) {
+					int healthPotions = 0;
+					int manaPotions = 0;
+					if(stolenPotions.get("health")!=null) healthPotions = stolenPotions.get("health");
+					if(stolenPotions.get("mana")!=null) manaPotions = stolenPotions.get("mana");
+					if(healthPotions!=0) {
+						role.setHealthPotions(role.getHealthPotions() + healthPotions);
+						System.out.println("+++++++++++ =========== +++++++++++");
+						System.out.println("You retrieved " + healthPotions + " health potions from the Imp!");
+						System.out.println("+++++++++++ =========== +++++++++++");
+					}
+					if(manaPotions!=0) {
+						role.setManaPotions(role.getManaPotions() + manaPotions);
+						System.out.println("+++++++++++ =========== +++++++++++");
+						System.out.println("You retrieved " + healthPotions + " mana potions from the Imp!");
+						System.out.println("+++++++++++ =========== +++++++++++");
+					}
+					stolenPotions.clear();
+				}
+			}
+			case "Ooze" -> {
+				role.setAttackDmg(role.getAttackDmg() + decreasedOozeDamage);
+				System.out.println("+++++++++++ =========== +++++++++++");
+				System.out.println("You cleaned up your weapon after the fight and strengthen it for " + decreasedOozeDamage + " damage!");
+				System.out.println("+++++++++++ =========== +++++++++++");
+				decreasedOozeDamage = 0;
+			}
+			case "Wolf" -> {
+				if(overtimeWolfDamage > 0) {
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("You patched your wounds up and you do not bleed anymore for " + overtimeWolfDamage + " damage!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+					overtimeWolfDamage = 0;
+				}
+			}
+		}
+
+
 		//Chance of gain health/mana potion
 		PotionHandler.healthPotionDrop(role);
 		PotionHandler.manaPotionDrop(role);
@@ -98,9 +145,35 @@ public class Combat {
 
     public static boolean calculateAfterSwing(Role role, BasicMonster basicMonster, int dmgDealt, int dmgTaken, boolean isDrinkingPotion) {
 		basicMonster.setMaxBasicMonsterHealth(basicMonster.getMaxBasicMonsterHealth() - dmgDealt);
-		role.setMaxHealth(role.getMaxHealth() - dmgTaken);
-		if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
-		System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
+		boolean willMonsterCastSpell = random.nextInt(100) < 20;
+		if(willMonsterCastSpell) {
+			usedMonsterSpell(basicMonster, role, dmgTaken);
+			switch (basicMonster.getName()) {
+				case "Corrupted Villager" -> {
+					role.setMaxHealth(role.getMaxHealth() - dmgTaken);
+					System.out.println(ConsoleColors.RED + "You receive " + increasedVillagerDamage + " damage." + ConsoleColors.RESET);
+					if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+					increasedVillagerDamage = 0;
+				}
+				case "Wolf" -> {
+					int damageWithBite = dmgTaken + overtimeWolfDamage;
+					role.setMaxHealth(role.getMaxHealth() - damageWithBite);
+					System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage " +
+							"with additional bite damage for " + overtimeWolfDamage + "." + ConsoleColors.RESET);
+					if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+				}
+				case "Ooze", "Imp", "Wraith" -> {
+					role.setMaxHealth(role.getMaxHealth() - dmgTaken);
+					System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
+					if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+				}
+			}
+		} else {
+			role.setMaxHealth(role.getMaxHealth() - dmgTaken);
+			System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
+			if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+		}
+
 		if(role.getMaxHealth() < 1) {
 			System.out.println("You died...");
 			return true;
@@ -108,5 +181,84 @@ public class Combat {
 			return false;
 		}
     }
+
+	public static void usedMonsterSpell(BasicMonster basicMonster, Role role, int dmgTaken) {
+		Random random = new Random();
+		switch (basicMonster.getName()) {
+			case "Corrupted Villager" -> {
+				increasedVillagerDamage = dmgTaken + ((CorruptedVillager) basicMonster).getSpell();
+				System.out.println("+++++++++++ =========== +++++++++++");
+				System.out.println("Corrupted Villager casts 'Rage Of The People'! " +
+						"It deals " + ((CorruptedVillager) basicMonster).getSpell() + " additional damage to you!");
+				System.out.println("+++++++++++ =========== +++++++++++");
+			}
+			case "Imp" -> {
+				String namePotion = "none";
+				if (random.nextInt(100) < 50 && role.getHealthPotions() > 0) {
+					role.setHealthPotions(role.getHealthPotions() - 1);
+					namePotion = "health";
+					stolenPotions.merge(namePotion, 1, Integer::sum);
+				} else if(role.getManaPotions() > 0){
+					role.setManaPotions(role.getManaPotions() - 1);
+					namePotion = "mana";
+					stolenPotions.merge(namePotion, 1, Integer::sum);
+				}
+				if(namePotion.equals("none")) {
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("Imp casts 'Ritual Robbing'! " +
+							"It does not steal a potion, since you do not posses one of that type!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+				} else {
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("Imp casts 'Ritual Robbing'! " +
+							"It steals a " + namePotion + " potion from you!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+				}
+			}
+			case "Ooze" -> {
+				int localReducedDamage = ((Ooze) basicMonster).getSpell();
+				if(role.getAttackDmg() > localReducedDamage) {
+					role.setAttackDmg(role.getAttackDmg() - localReducedDamage);
+					decreasedOozeDamage += localReducedDamage;
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("Ooze casts 'Sticky Weapon'! " +
+							"It reduces your maximum attack damage by " + localReducedDamage + "!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+				} else {
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("Ooze casts 'Sticky Weapon'! " +
+							"It does not reduce your maximum attack damage, since it reached its minimum, " + role.getAttackDmg() + "!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+				}
+
+			}
+			case "Wolf" -> {
+				overtimeWolfDamage += ((Wolf) basicMonster).getSpell();
+				System.out.println("+++++++++++ =========== +++++++++++");
+				System.out.println("Wolf casts 'Bite'! " +
+						"It is doing overtime damage by " + ((Wolf) basicMonster).getSpell() + "!" +
+						" (Stacked up to " + overtimeWolfDamage + " damage)");
+				System.out.println("+++++++++++ =========== +++++++++++");
+			}
+			case "Wraith" -> {
+				int reducedMana = ((Wraith) basicMonster).getSpell();
+				int reducedManaResult;
+				if(role.getMaxMana() > 0) {
+					if(role.getMaxMana() - reducedMana >= 0) {
+						reducedManaResult = role.getMaxMana() - reducedMana;
+						role.setMaxMana(reducedManaResult);
+						reducedManaResult = reducedMana;
+					} else {
+						reducedManaResult = role.getMaxMana();
+						role.setMaxMana(0);
+					}
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("Wraith casts 'Thirst For Power'! " +
+							"It reduces " + reducedManaResult + " points from your mana!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+				}
+			}
+		}
+	}
 
 }

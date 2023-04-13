@@ -9,7 +9,7 @@ public class StartContinueAdventure {
 	public static void beginningJourney(Role role) {
 		System.out.println("+++++++++++ =========== +++++++++++");
 		try {
-			System.out.println("As you ride your horse, you appear at a strange abandonded village...");
+			System.out.println("As you ride your horse, you appear at a strange abandoned village...");
 			System.out.println("The streets are so quiet, unless...");
 			Thread.sleep(3000);
 			System.out.println("A monster attacks you from one of the houses!");

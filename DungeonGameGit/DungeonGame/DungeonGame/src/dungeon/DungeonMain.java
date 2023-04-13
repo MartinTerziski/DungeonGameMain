@@ -27,7 +27,9 @@ public class DungeonMain {
 		Spells spells = chosenRole.getSpells();
 		
 		//Begin journey
-		StartContinueAdventure.beginningJourney(chosenRole);		
+		StartContinueAdventure.beginningJourney(chosenRole);
+
+		Combat combat = new Combat(chosenRole, spells, input);
 		
 		//Running the game
 		while(running) {
@@ -39,7 +41,7 @@ public class DungeonMain {
 			} while (counterMonsters.isMaxReached(basicMonster.getName()));
 			
 			//Actions in battle
-			if(Combat.calculateCombat(basicMonster, chosenRole, spells, input)) break;
+			if(combat.runCombat(basicMonster, chosenRole, spells, input)) break;
 			
 			//Should you go on?
 			running = StartContinueAdventure.continueAdventure(chosenRole, input);

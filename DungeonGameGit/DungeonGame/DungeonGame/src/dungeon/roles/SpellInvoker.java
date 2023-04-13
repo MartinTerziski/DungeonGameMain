@@ -6,7 +6,7 @@ import dungeon.actions.PotionHandler;
 import lombok.Data;
 
 @Data
-public class SpellInvoker extends RoleImpl implements Role, UIInfo{
+public class SpellInvoker extends RoleImpl implements Role{
 
 	public Spells spells;
 	

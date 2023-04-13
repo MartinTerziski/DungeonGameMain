@@ -6,7 +6,7 @@ import dungeon.actions.PotionHandler;
 import lombok.Data;
 
 @Data
-public class Juggernaut extends RoleImpl implements Role, UIInfo {
+public class Juggernaut extends RoleImpl implements Role{
 
 	private Spells spells;
 	

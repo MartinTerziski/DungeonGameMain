@@ -8,8 +8,16 @@ import java.util.Scanner;
 import dungeon.basicmonsters.*;
 import dungeon.roles.*;
 import dungeon.utilites.ConsoleColors;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
 public class Combat {
+
+	private final Role role;
+	private final Spells spells;
+	private final Scanner input;
 
 	private static final Map<String, Integer> stolenPotions = new HashMap<>();
 	private static int increasedVillagerDamage = 0;
@@ -17,7 +25,7 @@ public class Combat {
 	private static int overtimeWolfDamage = 0;
 	private static final Random random = new Random();
 
-    public static boolean calculateCombat(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
+    public boolean runCombat(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
 		System.out.println("+++++++++++ =========== +++++++++++");
 		while(basicMonster.getMaxBasicMonsterHealth() > 0) {
 			System.out.println("+++++++++++ =========== +++++++++++");
@@ -65,7 +73,7 @@ public class Combat {
 		return false;
 	}
 
-	public static boolean calculateFightActions(Role role, Spells spells, BasicMonster basicMonster, int dmgDealt, boolean isDrinkingPotion) {
+	public boolean calculateFightActions(Role role, Spells spells, BasicMonster basicMonster, int dmgDealt, boolean isDrinkingPotion) {
 		int dmgTaken;
 		//Range characters take 10% less damage
 		if (role instanceof SpellInvoker || role instanceof Marksman)
@@ -84,7 +92,7 @@ public class Combat {
 		return calculateAfterSwing(role, basicMonster, dmgDealt, dmgTaken, isDrinkingPotion);
 	}
     
-    public static void resultFromFight(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
+    public void resultFromFight(BasicMonster basicMonster, Role role, Spells spells, Scanner input) {
 		System.out.println("+++++++++++ =========== +++++++++++");
 		role.getLevelUp().setExperience(role.getLevelUp().getExperience() + basicMonster.getExperienceWeight());
 		if(role instanceof SpellInvoker) spells.setReducedDamageStack(0);

@@ -24,7 +24,7 @@ public class LevelUp {
         setLevel(currentLevel + 1);
 
         // Increase level divider by 30%
-        int newLevelDivider = (int) (getLevelDivider() * 1.3f);
+        int newLevelDivider = (int) (getLevelDivider() * 1.2f);
         setLevelDivider(newLevelDivider);
 
         // Reset remaining experience to zero or add it to next level's requirements
@@ -61,6 +61,7 @@ public class LevelUp {
                     role.setCoreHealth(role.getCoreHealth() + 10);
                     role.setCoreMana(role.getCoreMana() + 5);
                     role.setMaxHealth(role.getMaxHealth() + 10);
+                    role.setMaxMana(role.getMaxMana() + 5);
                     System.out.println("You upgraded your maximum health and mana," +
                             " you now have " + role.getCoreHealth() + " health and " + role.getCoreMana() + " mana!");
                     canContinue = false;

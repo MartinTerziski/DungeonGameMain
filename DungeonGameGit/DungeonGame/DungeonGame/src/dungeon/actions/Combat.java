@@ -26,8 +26,8 @@ public class Combat {
 			System.out.println("Your actions:");
 			System.out.println("\t1. Attack!");
 			System.out.println("\t2. Use spell!");
-			System.out.println("\t3. Drink Health potion! (You have " + role.getHealthPotions() + "/5 potions)");
-			System.out.println("\t4. Drink Mana potion! (You have " + role.getManaPotions() + "/5 potions)");
+			System.out.println("\t3. Drink Health potion! (You have " + role.getPotionHandler().getHealthPotions() + "/5 potions)");
+			System.out.println("\t4. Drink Mana potion! (You have " + role.getPotionHandler().getManaPotions() + "/5 potions)");
 			System.out.println("\t5. Flee!");
 
 			String action = input.nextLine();
@@ -44,7 +44,7 @@ public class Combat {
 					if (SpellsHandler.useSpell(spells, role, basicMonster, spell)) return true;
 				}
 				case "3", "4" -> {
-					PotionHandler.usePotion(role, action);
+					role.getPotionHandler().usePotion(role, action);
 					int dmgDealt = 0;
 					if (calculateFightActions(role, spells, basicMonster, dmgDealt, true)) return true;
 				}
@@ -101,26 +101,28 @@ public class Combat {
 					if(stolenPotions.get("health")!=null) healthPotions = stolenPotions.get("health");
 					if(stolenPotions.get("mana")!=null) manaPotions = stolenPotions.get("mana");
 					if(healthPotions!=0) {
-						role.setHealthPotions(role.getHealthPotions() + healthPotions);
+						role.getPotionHandler().setHealthPotions(role.getPotionHandler().getHealthPotions() + healthPotions);
 						System.out.println("+++++++++++ =========== +++++++++++");
 						System.out.println("You retrieved " + healthPotions + " health potions from the Imp!");
 						System.out.println("+++++++++++ =========== +++++++++++");
 					}
 					if(manaPotions!=0) {
-						role.setManaPotions(role.getManaPotions() + manaPotions);
+						role.getPotionHandler().setManaPotions(role.getPotionHandler().getManaPotions() + manaPotions);
 						System.out.println("+++++++++++ =========== +++++++++++");
-						System.out.println("You retrieved " + healthPotions + " mana potions from the Imp!");
+						System.out.println("You retrieved " + manaPotions + " mana potions from the Imp!");
 						System.out.println("+++++++++++ =========== +++++++++++");
 					}
 					stolenPotions.clear();
 				}
 			}
 			case "Ooze" -> {
-				role.setAttackDmg(role.getAttackDmg() + decreasedOozeDamage);
-				System.out.println("+++++++++++ =========== +++++++++++");
-				System.out.println("You cleaned up your weapon after the fight and strengthen it for " + decreasedOozeDamage + " damage!");
-				System.out.println("+++++++++++ =========== +++++++++++");
-				decreasedOozeDamage = 0;
+				if(decreasedOozeDamage > 0) {
+					role.setAttackDmg(role.getAttackDmg() + decreasedOozeDamage);
+					System.out.println("+++++++++++ =========== +++++++++++");
+					System.out.println("You cleaned up your weapon after the fight and strengthen it for " + decreasedOozeDamage + " damage!");
+					System.out.println("+++++++++++ =========== +++++++++++");
+					decreasedOozeDamage = 0;
+				}
 			}
 			case "Wolf" -> {
 				if(overtimeWolfDamage > 0) {
@@ -132,10 +134,9 @@ public class Combat {
 			}
 		}
 
-
 		//Chance of gain health/mana potion
-		PotionHandler.healthPotionDrop(role);
-		PotionHandler.manaPotionDrop(role);
+		role.getPotionHandler().healthPotionDrop();
+		role.getPotionHandler().manaPotionDrop();
 
 		// Level UP
 		if (role.getLevelUp().getExperience() >= role.getLevelUp().getLevelDivider()) {
@@ -150,9 +151,7 @@ public class Combat {
 			usedMonsterSpell(basicMonster, role, dmgTaken);
 			switch (basicMonster.getName()) {
 				case "Corrupted Villager" -> {
-					role.setMaxHealth(role.getMaxHealth() - dmgTaken);
-					System.out.println(ConsoleColors.RED + "You receive " + increasedVillagerDamage + " damage." + ConsoleColors.RESET);
-					if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+					resolveAfterAttack(role, basicMonster, increasedVillagerDamage, dmgDealt, isDrinkingPotion);
 					increasedVillagerDamage = 0;
 				}
 				case "Wolf" -> {
@@ -162,16 +161,10 @@ public class Combat {
 							"with additional bite damage for " + overtimeWolfDamage + "." + ConsoleColors.RESET);
 					if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
 				}
-				case "Ooze", "Imp", "Wraith" -> {
-					role.setMaxHealth(role.getMaxHealth() - dmgTaken);
-					System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
-					if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
-				}
+				case "Ooze", "Imp", "Wraith" -> resolveAfterAttack(role, basicMonster, dmgTaken, dmgDealt, isDrinkingPotion);
 			}
 		} else {
-			role.setMaxHealth(role.getMaxHealth() - dmgTaken);
-			System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
-			if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+			resolveAfterAttack(role, basicMonster, dmgTaken, dmgDealt, isDrinkingPotion);
 		}
 
 		if(role.getMaxHealth() < 1) {
@@ -181,6 +174,12 @@ public class Combat {
 			return false;
 		}
     }
+
+	public static void resolveAfterAttack(Role role, BasicMonster basicMonster, int dmgTaken, int dmgDealt, boolean isDrinkingPotion) {
+		role.setMaxHealth(role.getMaxHealth() - dmgTaken);
+		System.out.println(ConsoleColors.RED + "You receive " + dmgTaken + " damage." + ConsoleColors.RESET);
+		if(!isDrinkingPotion) System.out.println("You deal " + dmgDealt + " damage to the " + basicMonster.getName() + ".");
+	}
 
 	public static void usedMonsterSpell(BasicMonster basicMonster, Role role, int dmgTaken) {
 		Random random = new Random();
@@ -194,12 +193,12 @@ public class Combat {
 			}
 			case "Imp" -> {
 				String namePotion = "none";
-				if (random.nextInt(100) < 50 && role.getHealthPotions() > 0) {
-					role.setHealthPotions(role.getHealthPotions() - 1);
+				if (random.nextInt(100) < 50 && role.getPotionHandler().getHealthPotions() > 0) {
+					role.getPotionHandler().setHealthPotions(role.getPotionHandler().getHealthPotions() - 1);
 					namePotion = "health";
 					stolenPotions.merge(namePotion, 1, Integer::sum);
-				} else if(role.getManaPotions() > 0){
-					role.setManaPotions(role.getManaPotions() - 1);
+				} else if(role.getPotionHandler().getManaPotions() > 0){
+					role.getPotionHandler().setManaPotions(role.getPotionHandler().getManaPotions() - 1);
 					namePotion = "mana";
 					stolenPotions.merge(namePotion, 1, Integer::sum);
 				}
@@ -260,5 +259,4 @@ public class Combat {
 			}
 		}
 	}
-
 }

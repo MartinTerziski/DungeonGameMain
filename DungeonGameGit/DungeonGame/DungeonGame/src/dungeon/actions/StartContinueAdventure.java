@@ -27,8 +27,8 @@ public class StartContinueAdventure {
 		while(!continued) {
 			System.out.println("\t1. Advance through.");
 			System.out.println("\t2. See statistics.");
-			System.out.println("\t3. Use Health potion. (You have " + role.getHealthPotions() + "/5 potions)");
-			System.out.println("\t4. Use Mana potion. (You have " + role.getManaPotions() + "/5 potions)");
+			System.out.println("\t3. Use Health potion. (You have " + role.getPotionHandler().getHealthPotions() + "/5 potions)");
+			System.out.println("\t4. Use Mana potion. (You have " + role.getPotionHandler().getManaPotions() + "/5 potions)");
 			System.out.println("\t5. See number of slayed monsters.");
 			System.out.println("\t6. Leave the village.");
 			String nextInput = input.nextLine();
@@ -41,7 +41,7 @@ public class StartContinueAdventure {
 					System.out.println(role.stats());
 					System.out.println("+++++++++++ =========== +++++++++++");
 				}
-				case "3", "4" -> PotionHandler.usePotion(role, nextInput);
+				case "3", "4" -> role.getPotionHandler().usePotion(role, nextInput);
 				case "5" -> {
 					System.out.println(role.slayedMonstersCounter());
 					System.out.println("+++++++++++ =========== +++++++++++");

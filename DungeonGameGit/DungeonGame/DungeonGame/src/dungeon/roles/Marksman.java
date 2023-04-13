@@ -2,6 +2,7 @@ package dungeon.roles;
 
 import dungeon.actions.CounterMonsters;
 import dungeon.actions.LevelUp;
+import dungeon.actions.PotionHandler;
 import lombok.Data;
 
 @Data
@@ -10,11 +11,9 @@ public class Marksman extends RoleImpl implements Role {
 	private Spells spells;
 	
 	public Marksman(int coreHealth, int maxHealth, int coreMana, int maxMana, int attackDmg,
-					int healthPotions, int manaPotions, int potionHeal, int hpDropChance,
-					LevelUp levelUp, CounterMonsters counter, Spells spells) {
+					PotionHandler potionHandler, LevelUp levelUp, CounterMonsters counter, Spells spells) {
 		super(coreHealth, maxHealth, coreMana, maxMana, attackDmg,
-				healthPotions, manaPotions, potionHeal, hpDropChance,
-				levelUp, counter, spells);
+				potionHandler, levelUp, counter, spells);
 		this.spells = spells;
 	}
 	

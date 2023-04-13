@@ -64,7 +64,7 @@ public class MarksmanSpells extends AbstractSpells{
 		int poisonDamage = spells.getPoisonDmg();
 		role.setMaxMana(role.getMaxMana() - manaWeight);
 		if(SpellsHandler.notEnoughMana(role, manaWeight)) return false;
-		System.out.println("***You use a posioned arrow!***");
+		System.out.println("***You use a poisoned arrow!***");
 		return battleResolveAfterMarksmanSpell(spells, role, basicMonster, input, poisonArrow, poisonDamage);
     }
     

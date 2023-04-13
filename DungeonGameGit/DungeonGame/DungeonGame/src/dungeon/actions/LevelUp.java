@@ -1,22 +1,18 @@
 package dungeon.actions;
 
 import dungeon.roles.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Scanner;
 
 @Data
+@AllArgsConstructor
 public class LevelUp {
 
     public int experience;
     public int level;
     public int levelDivider;
-
-    public LevelUp(int experience, int level, int levelDivider) {
-        this.experience = experience;
-        this.level = level;
-        this.levelDivider = levelDivider;
-    }
 
     public void levelingUp(Role role, Scanner input) {
         boolean canContinue = true;
@@ -43,7 +39,7 @@ public class LevelUp {
             System.out.println("+++++++++++ =========== +++++++++++");
             System.out.println("What do you want to upgrade?");
             System.out.println("\t1. Increase maximum attack damage by 5");
-            System.out.println("\t2. Increase maximum health by 10");
+            System.out.println("\t2. Increase maximum health by 10 and mana by 5");
             System.out.println("\t3. Increase health/mana potions drop chance by 5%");
             System.out.println("\t4. Increase health/mana potion restoring percent by 10%");
             System.out.println("\t5. Upgrade spells");
@@ -63,22 +59,24 @@ public class LevelUp {
                 }
                 case "2" -> {
                     role.setCoreHealth(role.getCoreHealth() + 10);
+                    role.setCoreMana(role.getCoreMana() + 5);
                     role.setMaxHealth(role.getMaxHealth() + 10);
-                    System.out.println("You upgraded your maximum health, you now have " + role.getCoreHealth() + " health!");
+                    System.out.println("You upgraded your maximum health and mana," +
+                            " you now have " + role.getCoreHealth() + " health and " + role.getCoreMana() + " mana!");
                     canContinue = false;
                 }
                 case "3" -> {
-                    role.setPotionDropChance(role.getPotionDropChance() + 5);
-                    System.out.println("You upgraded your health potions drop chance, it now has " + role.getPotionDropChance() + "% drop chance!");
+                    role.getPotionHandler().setPotionDropChance(role.getPotionHandler().getPotionDropChance() + 5);
+                    System.out.println("You upgraded your health potions drop chance, it now has " + role.getPotionHandler().getPotionDropChance() + "% drop chance!");
                     canContinue = false;
                 }
                 case "4" -> {
-                    role.setPotionHeal(role.getPotionHeal() + 10);
-                    if (role.getPotionHeal() > 100) {
+                    role.getPotionHandler().setPotionHeal(role.getPotionHandler().getPotionHeal() + 10);
+                    if (role.getPotionHandler().getPotionHeal() > 100) {
                         System.out.println("Maximum restoring effect reached! Please choose another upgrade...");
-                        role.setPotionHeal(role.getPotionHeal() - 10);
+                        role.getPotionHandler().setPotionHeal(role.getPotionHandler().getPotionHeal() - 10);
                     } else {
-                        System.out.println("You upgraded your potions restoring percent to " + role.getPotionHeal() + "!");
+                        System.out.println("You upgraded your potions restoring percent to " + role.getPotionHandler().getPotionHeal() + "!");
                         canContinue = false;
                     }
                 }

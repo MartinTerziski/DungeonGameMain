@@ -1,6 +1,7 @@
 package dungeon.roles;
 
 import dungeon.actions.LevelUp;
+import dungeon.actions.PotionHandler;
 
 public interface Role{
 	
@@ -29,17 +30,7 @@ public interface Role{
 	int getAttackDmg();
 	void setAttackDmg(int i);
 
-	int getHealthPotions();
-	void setHealthPotions(int i);
-
-	int getPotionHeal();
-	void setPotionHeal(int i);
-
-	int getPotionDropChance();
-	void setPotionDropChance(int i);
-
-	int getManaPotions();
-	void setManaPotions(int i);
+	PotionHandler getPotionHandler();
 
 	LevelUp getLevelUp();
 	

@@ -2,6 +2,7 @@ package dungeon.roles;
 
 import dungeon.actions.CounterMonsters;
 import dungeon.actions.LevelUp;
+import dungeon.actions.PotionHandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,10 +16,7 @@ public class RoleImpl implements Role{
 	int coreMana;
 	int maxMana;
 	int attackDmg;
-	int healthPotions;
-	int manaPotions;
-	int potionHeal;
-	int potionDropChance;
+	PotionHandler potionHandler;
 	LevelUp levelUp;
 	CounterMonsters counter;
 	Spells spells;
@@ -34,8 +32,8 @@ public class RoleImpl implements Role{
 				"* Health: " + getMaxHealth() + "/" + getCoreHealth() + "\n" +
 				"* Mana: " + getMaxMana() + "/" + getCoreMana() + "\n" +
 				"* Maximum attack damage: " + getAttackDmg() + "\n" +
-				"* Health potions: " + getHealthPotions() + "\n" +
-				"* Mana potions: " + getManaPotions() + "\n" +
+				"* Health potions: " + getPotionHandler().getHealthPotions() + "\n" +
+				"* Mana potions: " + getPotionHandler().getManaPotions() + "\n" +
 				"* Experience: " + getLevelUp().getExperience() + "/" + getLevelUp().getLevelDivider() + "\n" +
 				"* Level: " + getLevelUp().getLevel() + "\n";
 	}

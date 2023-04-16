@@ -19,10 +19,13 @@ public class CounterMonsters {
     }
 
     public void increment(String monsterName) {
-        counterMap.put(monsterName, counterMap.getOrDefault(monsterName, 0) + 1);
+        int forIncrement = counterMap.getOrDefault(monsterName, 0);
+        if(forIncrement <= 5) {
+            counterMap.put(monsterName, forIncrement + 1);
+        }
     }
 
     public boolean isMaxReached(String monsterName) {
-        return counterMap.getOrDefault(monsterName, 0) >= 5;
+        return counterMap.getOrDefault(monsterName, 0) > 5;
     }
 }
